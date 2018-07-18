@@ -1,0 +1,19 @@
+
+- include_tasks: apt.yml
+  when: 
+    ansible_pkg_mgr == 'apt'
+
+- include_tasks: pacman.yml
+  when: 
+    - ansible_pkg_mgr == "pacman"
+
+- name: Install pip
+  package:
+    name: 
+      - python-pip
+    state: latest
+
+- include_tasks: yum.yml
+  when: 
+    ansible_pkg_mgr == 'dnf' or 
+    ansible_pkg_mgr == 'yum'

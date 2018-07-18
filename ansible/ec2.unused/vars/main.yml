@@ -1,0 +1,7 @@
+---
+  instance_type: t2.micro
+  security_group: ansible-webserver 
+  image: ami-fcc4db98 # This is an AMI for Ubuntu 16
+  keypair: awstest # This is the key you imported to AWS Key Pair Console
+  region: eu-west-2
+  count: 1

@@ -1,0 +1,7 @@
+# delete all non-running containers that don't end with _data
+#TODO
+## sudo docker rm `sudo docker ps -a | awk '!/_data/ && /Exited/ && FNR != 1{print $1}'`
+
+# delete all images with <none>
+#TODO
+##  sudo docker image rm `sudo docker images | awk '/none/ {print $3}'`

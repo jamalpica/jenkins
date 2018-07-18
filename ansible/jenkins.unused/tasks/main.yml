@@ -1,0 +1,46 @@
+---
+
+- name: 'Installing Docker'  
+  include_role:
+    name: docker
+
+- name: Pull an image
+  docker_image:
+    name: "{{image_name}}"
+    tag: "{{image_tag}}"
+  become: true
+  become_user: root
+
+- name: Create a volume for credentials
+  docker_volume:
+    name: "{{credentials_volume_name}}"
+  become: true
+  become_user: root
+  register: keys_volume
+  
+- name: Create a path for ssh key
+  set_fact:
+    ssh_key: "{{ ansible_env.HOME }}/.ssh/id_rsa"
+
+- name: Check if key exists
+  stat:
+    path: "{{ssh_key}}"
+  register: ssh_key_stats
+
+- name: Copy key to the volume
+  command: "cp {{ssh_key}} {{keys_volume.ansible_facts.docker_volume.Mountpoint}}/{{key_name}}"
+  when: ssh_key_stats.stat.exists
+  become: true
+  become_user: root
+
+- name: Create a jenkins container
+  docker_container:
+    name: "{{container_name}}"
+    image: "{{image_name}}:{{image_tag}}"
+    state: started
+    ports: "8080:8080"
+    tty: yes
+    volumes:
+      - "{{credentials_volume_name}}:/opt/keys"
+  become: true
+  become_user: root

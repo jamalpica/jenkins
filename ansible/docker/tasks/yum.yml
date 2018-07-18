@@ -1,0 +1,9 @@
+- name: Update pip
+  pip: 
+    name: pip
+    state: latest
+
+- name: Install docker
+  package:
+    name: docker
+    state: latest

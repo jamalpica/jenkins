@@ -1,0 +1,6 @@
+---
+  credentials_volume_name: credentials
+  image_name: ohopiak/flugel
+  image_tag: latest
+  container_name: jenkins
+  key_name: jenkins_rsa

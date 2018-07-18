@@ -1,0 +1,43 @@
+---
+
+- hosts: webserver
+  become: true
+  remote_user: ubuntu
+  gather_facts: no
+  pre_tasks:
+
+    - name: Updating Ubuntu Repository
+      raw: apt update -y
+
+    - name: Installing Python
+      raw: apt install python -y
+
+    - name: Adding Docker APT Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Installing Docker CE
+      apt:
+        update_cache: yes
+        name: docker.io
+        state: present
+
+    - name: Creating github directory
+      file:
+        path: /home/ubuntu/github
+        state: directory
+
+    - name: Cloning Git Repository
+      git:
+        repo: https://github.com/barbosacisco/fun-with-jenkins2.git
+        dest: /home/ubuntu/github
+        clone: yes
+
+    - name: Pulling Jenkins Image
+      command: chdir=/home/ubuntu/github docker build -t jenkins-master -f Dockerfile .
+
+    - name: Running Jenkins Docker Container
+      command: docker run -p 8080:8080 -d --name=jenkins-master jenkins-master
+
+

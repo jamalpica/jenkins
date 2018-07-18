@@ -1,0 +1,46 @@
+- name: Add docker apt repository key
+  apt_key:
+    url: "https://get.docker.io/gpg" 
+    state: present
+    validate_certs: false
+  register: result
+  ignore_errors: yes
+
+- name: Install apt-transport-https
+  package:
+    name: apt-transport-https
+    state: present
+  ignore_errors: yes
+
+- name: Add docker apt repository
+  apt_repository: 
+    repo: 'deb http://get.docker.io/ubuntu docker main' 
+    state: present
+  when: not result|failed
+  ignore_errors: yes
+
+- name: Update system
+  package: 
+    update_cache: yes 
+  ignore_errors: yes
+
+- name: Install lxc-docker
+  package:
+    name: lxc-docker
+    state: latest
+  ignore_errors: yes
+  when: not result|failed
+
+- name: Install docker.io
+  package:
+    name: docker.io
+    state: latest
+    force: yes
+  ignore_errors: yes
+  register: found
+
+- name: Install docker
+  package:
+    name: docker
+    state: latest
+  when: found|failed

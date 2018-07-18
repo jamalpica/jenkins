@@ -1,0 +1,30 @@
+
+- name: Test if docker is installed
+  command: docker
+  register: docker_is_installed
+  become: true
+  become_user: root
+  ignore_errors: True
+
+- name: Install docker
+  include_tasks: install.yml
+  when: docker_is_installed|failed
+
+- name: Install iptables
+  package:
+    name: 
+      - iptables
+    state: latest
+
+- name: Install docker-py with pip
+  pip:
+    name: docker-py
+
+- name: Start docker on boot
+  systemd: 
+    name: docker 
+    state: started 
+    enabled: yes
+  when: 
+    - ansible_service_mgr == "service"
+  ignore_errors: yes
