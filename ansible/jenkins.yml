@@ -30,7 +30,7 @@
 
     - name: Cloning Git Repository
       git:
-        repo: https://github.com/barbosacisco/fun-with-jenkins2.git
+        repo: https://github.com/jamalpica/jenkins.git
         dest: /home/ubuntu/github
         clone: yes
 

@@ -8,8 +8,8 @@ pipelineJob('Build and deploy') {
                 git {
                     branches('*/master')
                     remote {
-                        url ('git@github.com:flugel-it/fun-with-jenkins2.git')
-                        credentials ('jenkins-key')
+                        url ('https://github.com/jamalpica/jenkins.git')
+                        credentials ('')
                     }
                 }
             }

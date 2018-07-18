@@ -39,9 +39,9 @@ dsl_name = "pipelines-dsl-bootstrap"
 
 dsl = new hudson.model.FreeStyleProject(jenkins, dsl_name)
 dsl.addTrigger(new SCMTrigger("*/5 * * * *"))
-dsl.scm = new GitSCM("git@github.com:flugel-it/fun-with-jenkins2.git")
+dsl.scm = new GitSCM("https://github.com/jamalpica/jenkins.git")
 dsl.scm.branches = [new BranchSpec("*/master")]
-dsl.scm.userRemoteConfigs[0].credentialsId = 'jenkins-key'
+dsl.scm.userRemoteConfigs[0].credentialsId = ''
 
 String pipelineScripts = "${dsl_name}.groovy".replaceAll("-", "_")
 
